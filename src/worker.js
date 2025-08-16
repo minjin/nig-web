@@ -1,89 +1,16 @@
 // Cloudflare Worker entry point
 export default {
   async fetch(request, env, ctx) {
-    const url = new URL(request.url);
+    const html = getOptimizedHTML();
     
-    // Handle static assets
-    if (url.pathname.startsWith('/assets/') || 
-        url.pathname.startsWith('/images/') ||
-        url.pathname.endsWith('.css') ||
-        url.pathname.endsWith('.js') ||
-        url.pathname.endsWith('.png') ||
-        url.pathname.endsWith('.jpg') ||
-        url.pathname.endsWith('.svg') ||
-        url.pathname.endsWith('.woff2')) {
-      return handleStaticAsset(request, env);
-    }
-    
-    // Default to serving the main HTML
-    return serveHTML(request, env);
+    return new Response(html, {
+      headers: {
+        'Content-Type': 'text/html;charset=UTF-8',
+        'Cache-Control': 'public, max-age=3600',
+      },
+    });
   },
 };
-
-async function handleStaticAsset(request, env) {
-  const url = new URL(request.url);
-  const cacheKey = new Request(url.toString(), request);
-  const cache = caches.default;
-  
-  // Check cache first
-  let response = await cache.match(cacheKey);
-  
-  if (!response) {
-    // Try to fetch from KV storage or origin
-    const assetKey = url.pathname.substring(1); // Remove leading /
-    
-    if (env.ASSETS) {
-      const asset = await env.ASSETS.get(assetKey, { type: 'stream' });
-      if (asset) {
-        response = new Response(asset, {
-          headers: {
-            'Content-Type': getContentType(assetKey),
-            'Cache-Control': 'public, max-age=31536000',
-          },
-        });
-        
-        // Store in cache
-        ctx.waitUntil(cache.put(cacheKey, response.clone()));
-      }
-    }
-    
-    if (!response) {
-      return new Response('Not Found', { status: 404 });
-    }
-  }
-  
-  return response;
-}
-
-async function serveHTML(request, env) {
-  const html = getOptimizedHTML();
-  
-  return new Response(html, {
-    headers: {
-      'Content-Type': 'text/html;charset=UTF-8',
-      'Cache-Control': 'public, max-age=3600',
-    },
-  });
-}
-
-function getContentType(filename) {
-  const ext = filename.split('.').pop().toLowerCase();
-  const types = {
-    'html': 'text/html',
-    'css': 'text/css',
-    'js': 'application/javascript',
-    'json': 'application/json',
-    'png': 'image/png',
-    'jpg': 'image/jpeg',
-    'jpeg': 'image/jpeg',
-    'svg': 'image/svg+xml',
-    'woff2': 'font/woff2',
-    'woff': 'font/woff',
-    'ttf': 'font/ttf',
-  };
-  
-  return types[ext] || 'application/octet-stream';
-}
 
 function getOptimizedHTML() {
   return `<!doctype html>
