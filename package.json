@@ -8,8 +8,7 @@
     "build": "echo 'No build needed'"
   },
   "devDependencies": {
-    "wrangler": "^3.0.0",
-    "@cloudflare/kv-asset-handler": "^0.3.0"
+    "wrangler": "^3.0.0"
   },
   "dependencies": {}
 }
