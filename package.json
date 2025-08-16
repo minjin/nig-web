@@ -1,0 +1,14 @@
+{
+  "name": "nig-web",
+  "version": "1.0.0",
+  "description": "Kenshiki AI website optimized for Cloudflare Workers",
+  "scripts": {
+    "dev": "wrangler dev",
+    "deploy": "wrangler deploy",
+    "build": "node scripts/build.js"
+  },
+  "devDependencies": {
+    "wrangler": "^3.0.0"
+  },
+  "dependencies": {}
+}

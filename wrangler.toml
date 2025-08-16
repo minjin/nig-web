@@ -1,0 +1,14 @@
+name = "nig-web"
+main = "src/worker.js"
+compatibility_date = "2024-01-01"
+
+[site]
+bucket = "./public"
+
+[env.production]
+route = "kenshiki.jp/*"
+
+[[kv_namespaces]]
+binding = "CACHE"
+id = "your-kv-namespace-id"
+preview_id = "your-kv-namespace-preview-id"
