@@ -3,12 +3,13 @@
   "version": "1.0.0",
   "description": "Kenshiki AI website optimized for Cloudflare Workers",
   "scripts": {
-    "dev": "wrangler dev",
-    "deploy": "wrangler deploy",
+    "dev": "wrangler dev --site",
+    "deploy": "wrangler deploy --site",
     "build": "echo 'No build needed'"
   },
   "devDependencies": {
-    "wrangler": "^3.0.0"
+    "wrangler": "^3.0.0",
+    "@cloudflare/kv-asset-handler": "^0.3.0"
   },
   "dependencies": {}
 }

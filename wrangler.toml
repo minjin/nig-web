@@ -7,9 +7,3 @@ bucket = "./public"
 
 [env.production]
 route = "kenshiki.jp/*"
-
-# KV namespace is optional - uncomment and add your IDs if needed
-# [[kv_namespaces]]
-# binding = "CACHE"
-# id = "your-kv-namespace-id"
-# preview_id = "your-kv-namespace-preview-id"
